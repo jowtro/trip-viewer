@@ -29,8 +29,8 @@ masked_engine_status = ma.masked_array(engine_status_array, mask=nan_mask)
 # Create subplots
 fig, (ax3) = plt.subplots(1, sharex=True, figsize=(10, 8))
 
-# Plot engine status with gaps
-ax3.plot(datetimes, masked_engine_status, marker='o', color='blue', label='Engine_Status')
+# Plot Gantt chart using scatter plot
+ax3.scatter(datetimes, masked_engine_status, marker='o', color='blue', label='Engine_Status')
 ax3.set_xlabel('Datetime')
 ax3.set_ylabel('Engine_Status')
 ax3.legend()
@@ -40,7 +40,7 @@ cursor(ax3)  # or just mplcursors.cursor()
 
 # Formatting date axis
 ax3.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M:%S'))
-ax3.xaxis.set_major_locator(mdates.SecondLocator(interval=30))  # Adjust interval as needed
+#ax3.xaxis.set_major_locator(mdates.SecondLocator(interval=10))  # Adjust interval as needed
 
 # Rotate x-axis labels for better readability
 plt.gcf().autofmt_xdate()
