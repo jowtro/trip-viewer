@@ -4,6 +4,7 @@ from datetime import datetime
 import matplotlib.dates as mdates
 import numpy as np
 import numpy.ma as ma
+from mplcursors import cursor
 
 # Your data (assuming it's stored in a list named 'events')
 events = []
@@ -34,12 +35,18 @@ ax3.set_xlabel('Datetime')
 ax3.set_ylabel('Engine_Status')
 ax3.legend()
 
+# Create and configure MPLCursors cursor
+cursor(ax3)  # or just mplcursors.cursor()
+
 # Formatting date axis
-plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M:%S'))
-plt.gca().xaxis.set_major_locator(mdates.SecondLocator(interval=10))  # Adjust interval as needed
+ax3.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M:%S'))
+ax3.xaxis.set_major_locator(mdates.SecondLocator(interval=30))  # Adjust interval as needed
 
 # Rotate x-axis labels for better readability
 plt.gcf().autofmt_xdate()
+
+# Hide datetime legend
+ax3.get_legend().set_visible(False)
 
 # Show the plot
 plt.show()

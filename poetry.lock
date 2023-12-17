@@ -305,6 +305,22 @@ pyparsing = ">=2.3.1"
 python-dateutil = ">=2.7"
 
 [[package]]
+name = "mplcursors"
+version = "0.5.2"
+description = "Interactive data selection cursors for Matplotlib."
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "mplcursors-0.5.2.tar.gz", hash = "sha256:78febb32adf2d9040e2f6fc84b5e4cfb8f96b4ede4916fc418e5fffbcfdc0957"},
+]
+
+[package.dependencies]
+matplotlib = ">=3.1"
+
+[package.extras]
+docs = ["pandas", "pydata_sphinx_theme (!=0.10.1)", "sphinx", "sphinx-gallery"]
+
+[[package]]
 name = "numpy"
 version = "1.26.2"
 description = "Fundamental package for array computing in Python"
@@ -558,4 +574,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "27a1207789f2fc230df5ea14b8f997d880aa964615c8cb0b2bfbd21719df75b9"
+content-hash = "6e644e50a1f2e1d750db548442b1c633eee3a25c0d8d29578fa5f409c47ee46a"
