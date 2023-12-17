@@ -8,7 +8,7 @@ import numpy.ma as ma
 # Your data (assuming it's stored in a list named 'events')
 events = []
 
-with open('mock_smallest.log') as f:
+with open('mock_test.txt') as f:
     for line in f:
         event = json.loads(line)  # Use 'line' directly
         events.append(event)
