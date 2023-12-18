@@ -5,6 +5,7 @@ import matplotlib.dates as mdates
 import numpy as np
 import numpy.ma as ma
 from mplcursors import cursor
+import plotly.graph_objects as go
 
 # Your data (assuming it's stored in a list named 'events')
 events = []
@@ -49,4 +50,32 @@ plt.gcf().autofmt_xdate()
 ax3.get_legend().set_visible(False)
 
 # Show the plot
-plt.show()
+#plt.show()
+
+
+
+# Plotly figure for Gantt chart
+fig = go.Figure()
+
+# Add Gantt chart using scatter plot
+fig.add_trace(
+    go.Scatter(
+        x=datetimes,
+        y=masked_engine_status,
+        mode='markers',
+        marker=dict(color='blue', size=8),
+        name='Engine_Status'
+    )
+)
+
+# Formatting layout
+fig.update_layout(
+    title='Engine Status Over Time',
+    xaxis_title='Datetime',
+    yaxis_title='Engine_Status',
+    xaxis=dict(type='date'),
+    showlegend=True,
+)
+
+# Show the plot
+fig.show()
