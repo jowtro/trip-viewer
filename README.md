@@ -66,3 +66,51 @@ To install and run the project, follow these steps:
     ```
     poetry run python main.py
     ```
+
+---
+
+## Project Explanation
+
+### Overview & Purpose
+`trip-viewer` is a Python vehicle telemetry analysis and visualization toolkit managed with **Poetry**. It ingests newline-delimited JSON (JSON Lines) vehicle trip logs (`mock_test.txt`) containing high-frequency timestamped telemetry events (such as GPS coordinates, ignition/engine status, speed, and odometer readings), computes summary trip metrics with **Pandas**, and visualizes engine status timelines and data gaps using **Matplotlib**, **NumPy masked arrays (`numpy.ma`)**, and **mplcursors**.
+
+### Architecture & Key Scripts
+
+1. **Telemetry Dataset (`mock_test.txt`)**
+   - Stores raw vehicle telemetry in JSON Lines (`.jsonl`) format where each line is a timestamped event payload containing nested objects such as `datetime` (`YYYY-MM-DDTHH:MM:SS.000Z`), `engine` (`{"status": "running" | "off"}`), `speed` (`{"value": ...}`), and `odometer` (`{"value": ...}`).
+
+2. **Interactive Engine Status Timeline (`trip_chart.py`)**
+   - Reads `mock_test.txt` line-by-line using `json.loads()`.
+   - Parses ISO-8601 UTC timestamps into Python `datetime` objects (`datetime.strptime(..., "%Y-%m-%dT%H:%M:%S.000Z")`) and extracts `event["engine"]["status"]`, defaulting missing entries to `np.nan`.
+   - Builds a boolean mask (`nan_mask`) and wraps the status series in a **NumPy Masked Array** (`numpy.ma.masked_array`) so missing telemetry points are cleanly omitted when plotting.
+   - Renders a Matplotlib scatter/Gantt-style plot (`ax3.scatter`) formatted with `matplotlib.dates.DateFormatter('%Y-%m-%d %H:%M:%S')` and attaches interactive hover data cursors via `mplcursors.cursor(ax3)`.
+
+3. **Pandas Trip Metrics Analyzer (`trip_analysis.py`)**
+   - Loads `mock_test.txt` directly into a Pandas DataFrame via `pd.read_json('mock_test.txt', lines=True)`.
+   - Computes key operational trip metrics from nested dictionary columns:
+     - **Engine Running Time**: Count of telemetry records where `engine.status == 'running'`.
+     - **Engine Off Time**: Count of telemetry records where `engine.status == 'off'`.
+     - **Total Distance (`km`)**: Difference between the maximum and minimum `odometer.value` readings across the trip (`max() - min()`), safely handling missing `odometer` keys.
+     - **Average Speed (`km/h`)**: Mean of all non-null `speed.value` entries (`dropna().mean()`).
+
+4. **Matplotlib Experiments (`playground/`)**
+   - `playground/gap_test.py`: Demonstrates how Matplotlib natively breaks line segments (`plt.plot`) when a numeric NumPy array (`speed`) contains `np.nan` values, creating visual gaps for missing telemetry intervals.
+   - `playground/on_off.py`: Tests plotting categorical string arrays (`"running"`, `"off"`, `np.nan`) over time to observe how Matplotlib maps categorical states and `NaN` values on the Y-axis.
+   - `playground/teste.py`: Minimal prototype demonstrating custom categorical tick label mapping using `ax.set_xticks()` and `ax.set_xticklabels()`.
+
+### Running the Scripts
+
+```bash
+# Install dependencies via Poetry
+poetry install
+
+# Run the Pandas trip metrics summary
+poetry run python trip_analysis.py
+
+# Run the interactive Matplotlib engine status chart
+poetry run python trip_chart.py
+
+# Run the playground gap/categorical experiments
+poetry run python playground/gap_test.py
+poetry run python playground/on_off.py
+```
